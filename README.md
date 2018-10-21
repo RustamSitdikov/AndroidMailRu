@@ -1,2 +1,2 @@
-# AndroidMailRu
+# MailRuAndroid
 Mail.ru Android course
