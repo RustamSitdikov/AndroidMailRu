@@ -32,6 +32,7 @@ class TimerActivity : AppCompatActivity() {
     private var mTimer: CountDownTimer? = null
     private var mCountingTime: Long = SECONDS_TO_COUNTDOWN * MILLIS_PER_SECOND
     private var mTimerIsRunning: Boolean = false
+    private var mTimerTime: String = ""
 
     private lateinit var mUnits: Array<String>
     private lateinit var mTens: Array<String>
@@ -46,8 +47,9 @@ class TimerActivity : AppCompatActivity() {
     private fun initValues() {
         mCountingTime = SECONDS_TO_COUNTDOWN * MILLIS_PER_SECOND
         mTimerIsRunning = false
+        mTimerTime = resources.getString(R.string.nothing)
         mButton.setText(R.string.start)
-        mTextView.setText(R.string.nothing)
+        mTextView.setText(mTimerTime)
     }
 
     private fun startTimer(countDownMillis: Long) {
@@ -56,7 +58,8 @@ class TimerActivity : AppCompatActivity() {
             mTimer = object : CountDownTimer(countDownMillis, MILLIS_PER_SECOND) {
                 override fun onTick(millisUntilFinished: Long) {
                     mCountingTime = millisUntilFinished
-                    mTextView.text = num2str((SECONDS_TO_COUNTDOWN - mCountingTime / MILLIS_PER_SECOND).toInt())
+                    mTimerTime = num2str((SECONDS_TO_COUNTDOWN - mCountingTime / MILLIS_PER_SECOND).toInt())
+                    mTextView.text = mTimerTime
                 }
 
                 override fun onFinish() {
@@ -114,7 +117,7 @@ class TimerActivity : AppCompatActivity() {
 
         Log.i(LOG_TAG, "onRestoreInstanceState")
         mCountingTime = savedInstanceState.getLong(ARGS_COUNTING_TIME)
-        mTextView.text = savedInstanceState.getString(ARGS_TIMER_TIME)
+        mTimerTime = savedInstanceState.getString(ARGS_TIMER_TIME) ?: resources.getString(R.string.nothing)
         mTimerIsRunning = savedInstanceState.getBoolean(ARGS_TIMER_IS_RUNNING)
     }
 
@@ -122,7 +125,7 @@ class TimerActivity : AppCompatActivity() {
         Log.i(LOG_TAG, "onSaveInstanceState")
         outState?.run {
             putLong(ARGS_COUNTING_TIME, mCountingTime)
-            putString(ARGS_TIMER_TIME, mTextView.toString())
+            putString(ARGS_TIMER_TIME, mTimerTime)
             putBoolean(ARGS_TIMER_IS_RUNNING, mTimerIsRunning)
         }
 
