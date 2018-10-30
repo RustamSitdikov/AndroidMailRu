@@ -56,4 +56,10 @@
         <item>девятьсот</item>
         <item>тысяча</item>
     </string-array>
+
+    <string-array
+            name="thousands">
+        <item></item>
+        <item>тысяча</item>
+    </string-array>
 </resources>

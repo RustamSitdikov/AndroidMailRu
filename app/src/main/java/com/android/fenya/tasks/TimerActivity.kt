@@ -11,12 +11,12 @@ import android.widget.TextView
 class TimerActivity : AppCompatActivity() {
 
     companion object {
-        const val ARGS_COUNTING_TIME: String = "countintg_time"
+        const val ARGS_COUNTING_TIME: String = "counting_time"
         const val ARGS_TIMER_TIME: String = "timer_time"
         const val ARGS_TIMER_IS_RUNNING: String = "timer_is_running"
 
         const val MILLIS_PER_SECOND: Long = 1000
-        const val SECONDS_TO_COUNTDOWN: Long = 20
+        const val SECONDS_TO_COUNTDOWN: Long = 1000
 
         const val TEN = 10
         const val TWENTY = 20
@@ -32,27 +32,28 @@ class TimerActivity : AppCompatActivity() {
     private var mTimer: CountDownTimer? = null
     private var mCountingTime: Long = SECONDS_TO_COUNTDOWN * MILLIS_PER_SECOND
     private var mTimerIsRunning: Boolean = false
-    private var mTimerTime: String = ""
+    private var mTimerTime: String? = null
 
     private lateinit var mUnits: Array<String>
     private lateinit var mTens: Array<String>
     private lateinit var mHundreds: Array<String>
+    private lateinit var mThousands: Array<String>
 
     private fun initResources() {
         mUnits = resources.getStringArray(R.array.units)
         mTens = resources.getStringArray(R.array.tens)
         mHundreds = resources.getStringArray(R.array.hundreds)
+        mThousands = resources.getStringArray(R.array.thousands)
     }
 
     private fun initValues() {
         mCountingTime = SECONDS_TO_COUNTDOWN * MILLIS_PER_SECOND
         mTimerIsRunning = false
-        mTimerTime = resources.getString(R.string.nothing)
         mButton.setText(R.string.start)
-        mTextView.setText(mTimerTime)
     }
 
     private fun startTimer(countDownMillis: Long) {
+        mTextView.text = mTimerTime
         if (mTimerIsRunning) {
             mButton.setText(R.string.stop)
             mTimer = object : CountDownTimer(countDownMillis, MILLIS_PER_SECOND) {
@@ -143,7 +144,7 @@ class TimerActivity : AppCompatActivity() {
 
         return if (number < THOUSAND) {
             mHundreds[number / HUNDRED] + (if (number % HUNDRED != 0) " " else "") + num2str(number % HUNDRED)
-        } else THOUSAND.toString()
+        } else mThousands[number / THOUSAND]
 
     }
 }
